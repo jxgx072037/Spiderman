@@ -11,7 +11,7 @@ import random
 ssl._create_default_https_context = ssl._create_unverified_context
 
 #用系统当前时间做一个随机数生成器
-random.seed(datetime.datetime.now())
+random.seed(datetime.datetime.now()
 
 #函数：获取页面wiki词条a标签的href属性
 def getLinks(url):
