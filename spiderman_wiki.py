@@ -11,10 +11,13 @@ import random
 ssl._create_default_https_context = ssl._create_unverified_context
 
 #用系统当前时间做一个随机数生成器
-random.seed(datetime.datetime.now()
+random.seed(datetime.datetime.now())
+
+pages = set()
 
 #函数：获取页面wiki词条a标签的href属性
 def getLinks(url):
+    global pages
     try:
         html = urlopen('https://en.wikipedia.org'+url)
     except HTTPError as e:
@@ -22,18 +25,25 @@ def getLinks(url):
         return None
     try:
         bsObj = BeautifulSoup(html.read(), 'lxml')
-        web_info = bsObj.find('div', {'id':'bodyContent', }).findAll('a', href = re.compile('\/wiki\/((?!:).)*$'))
+        web_info = bsObj.find('div', {'id':'bodyContent'}).findAll('a', href = re.compile('/wiki/((?!:).)*$'))
+        for link in web_info:
+            if 'href' in link.attrs:
+                if link.attrs['href'] not in pages:
+                    print(bsObj.find('h1').string)
+                    print(bsObj.find('div', {'id': 'mw-content-text'}).find('p').get_text())
+                    try:
+                        print(bsObj.find('a', {'class': 'wbc-editpage'}).attrs['href'])
+                    except AttributeError as e:
+                        print('%s页面缺少相关属性' % url)
+                    newPage = link.attrs['href']
+                    # print(newPage)
+                    pages.add(newPage)
+                    print(pages)
+                    print('\n')
+                    getLinks(newPage)
     except AttributeError as e:
         print (e)
         return None
     return web_info
 
-
-links = getLinks('/wiki/Kevin_Bacon')
-if links == None:
-    print ('Links could not be found, check the code.')
-else:
-    while len(links)>= 0:
-        new_url = links[random.randint(0, len(links)-1)].attrs['href']
-        print(new_url)
-        getLinks(new_url)
+getLinks('')
