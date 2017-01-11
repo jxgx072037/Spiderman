@@ -1,3 +1,4 @@
+#从wiki主页开始，递归抓取页面的标题、第一段内容和编辑按钮的链接，并打印出来
 from urllib.request import urlopen
 from urllib.error import URLError
 from urllib.error import HTTPError
@@ -29,10 +30,10 @@ def getLinks(url):
         for link in web_info:
             if 'href' in link.attrs:
                 if link.attrs['href'] not in pages:
-                    print(bsObj.find('h1').string)
-                    print(bsObj.find('div', {'id': 'mw-content-text'}).find('p').get_text())
+                    print(bsObj.find('h1').string) #打印页面的标题
+                    print(bsObj.find('div', {'id': 'mw-content-text'}).find('p').get_text()) #打印页面第一段的内容
                     try:
-                        print(bsObj.find('a', {'class': 'wbc-editpage'}).attrs['href'])
+                        print(bsObj.find('a', {'class': 'wbc-editpage'}).attrs['href']) #打印页面编辑按钮的链接，如果有的话
                     except AttributeError as e:
                         print('%s页面缺少相关属性' % url)
                     newPage = link.attrs['href']
