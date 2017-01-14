@@ -1,5 +1,6 @@
 # encoding:utf-8
-# 以下代码用于获取byeah的所有城市，并存储在数据库climbing_guide的city_info表中
+# 以下代码用于获取byeah的所有城市，并存储在数据库climbing_guide的city_info表中.
+# pymysql相关教程请见：http://www.open-open.com/lib/view/open1424699022093.html
 from urllib.request import urlopen
 from urllib.error import URLError
 from urllib.error import HTTPError
